@@ -4,216 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>财务报表</title>
-    <!-- 引入 Element Plus 的样式 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css" />
-    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <script>
-        const { createApp, ref, onMounted } = Vue;
-        const app = createApp({
-            setup() {
-                const financialData = ref({
-                    vehicleIncome: 208039.43,
-                    totalExpense: 227434.72,
-                    balance: -19395.29,
-                    profitMargin: 1.74,
-                    expenseDetails: [
-                        { 
-                            category: '实付工资', 
-                            amount: 113844.22, 
-                            description: '郁总 22,721.63元，郑 27,914.93元，徐 10,899.87元，陈 3,649.74元，飞 6,000元，史 4,800元，阮 -1,311.26元，王益波提成 39,092.54元（未付）【邮政扣1月公积金2,250元，扣社保10,307.28元（单位4,812×25.2%=1,212.62元，个人4,812×10.5%=505.26元）；泰隆银行扣徐思凡社保1,727.51元（单位部分25.4%）+1月公积金250元；收回郁凌社保1,717.88元和公积金250元；1月份社保单位部分增收1%=48.12元】'
-                        },
-                        { 
-                            category: '房租', 
-                            amount: 34959.65, 
-                            description: '25年1月房租 28,524.65元；承担装潢部1-2月房租 6,435元'
-                        },
-                        {
-                            category: '物业管理', 
-                            amount: 25048.4, 
-                            description: '25.1物业费 5,520.9元；25年梅山展厅物业费 19,527.5元'
-                        },
-                        { 
-                            category: '税金', 
-                            amount: -3900, 
-                            description: '威尔法正卜高开4,000元扣13%税点520元，余姚进项92.9万冲红2.3万补扣13%税点2,990元，埃尔法常成高开2,000元扣260元，装潢高开1,000元扣130元'
-                        },
-                        { 
-                            category: '水电', 
-                            amount: 700.69, 
-                            description: '1月水电费：13.46 + 624.75 + 62.48 = 700.69元'
-                        },
-                        { 
-                            category: '财务费用', 
-                            amount: 2278.12, 
-                            description: '邮政扣印花税 307.45元，泰隆银行扣印花税 1,810.67元，邮政扣手续费 80 + 80 = 160元'
-                        },
-                        { 
-                            category: '招待费', 
-                            amount: 7180, 
-                            description: '招待费：4,180元 + 3,000元 = 7,180元'
-                        },
-                        { 
-                            category: '宣传费', 
-                            amount: 500, 
-                            description: '马丁试驾视频：500元'
-                        },
-                        { 
-                            category: '管理费用', 
-                            amount: 25155.56, 
-                            description: '1月停车费：700元，裱字：2,980元，资料邮费：12 + 26 = 38元，牛奶：129.6元，样车马工合同回寄：12元，汉堡：32元，药：19.46元，牛奶：100.5元，马丁试驾广告牌：36元，中饭：390元，水果：789元，统计会议买票路费：27 × 2 × 0.5 = 27元，饭卡充值：1,000元，烟：1,520元，大米：350元，年会餐费：6,888元，衢州菜：260元，茶叶三盒：590 × 3 = 1,770元，中午买菜：314元，苹果：1,800元，年费：6,000元'
-                        },
-                        { 
-                            category: '融资利息', 
-                            amount: 8901.17, 
-                            description: '25年1月利息：23,978.17元，1月车辆利息：15,077元'
-                        },
-                        { 
-                            category: '通讯费', 
-                            amount: 200, 
-                            description: '电话费：200元'
-                        }
-                    ]
-                });
-
-                const expenseChart = ref(null);
-                const overviewChart = ref(null);
-
-                const formatNumber = (num) => {
-                    if (num === undefined || num === null) return '0';
-                    return num.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                };
-
-                onMounted(() => {
-                    // 初始化支出分布图表
-                    if (expenseChart.value) {
-                        const chart = echarts.init(expenseChart.value);
-                        const expenseData = financialData.value.expenseDetails
-                            .filter(item => item.amount > 0)
-                            .map(item => ({
-                                name: item.category,
-                                value: item.amount
-                            }));
-
-                        chart.setOption({
-                            tooltip: {
-                                trigger: 'item',
-                                formatter: '{b}: ¥{c} ({d}%)'
-                            },
-                            legend: {
-                                orient: 'vertical',
-                                right: 10,
-                                top: 'center'
-                            },
-                            series: [{
-                                type: 'pie',
-                                radius: ['40%', '70%'],
-                                avoidLabelOverlap: true,
-                                itemStyle: {
-                                    borderRadius: 10,
-                                    borderColor: '#fff',
-                                    borderWidth: 2
-                                },
-                                label: {
-                                    show: true,
-                                    formatter: '{b}: {d}%'
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                        fontSize: 16,
-                                        fontWeight: 'bold'
-                                    }
-                                },
-                                data: expenseData
-                            }]
-                        });
-                    }
-
-                    // 初始化收支概览图表
-                    if (overviewChart.value) {
-                        const chart = echarts.init(overviewChart.value);
-                        chart.setOption({
-                            tooltip: {
-                                trigger: 'axis',
-                                axisPointer: {
-                                    type: 'shadow'
-                                }
-                            },
-                            grid: {
-                                left: '3%',
-                                right: '4%',
-                                bottom: '3%',
-                                containLabel: true
-                            },
-                            xAxis: {
-                                type: 'value',
-                                axisLabel: {
-                                    formatter: '¥{value}'
-                                }
-                            },
-                            yAxis: {
-                                type: 'category',
-                                data: ['收入', '支出', '结余']
-                            },
-                            series: [{
-                                name: '金额',
-                                type: 'bar',
-                                data: [
-                                    { value: financialData.value.vehicleIncome, itemStyle: { color: '#67C23A' } },
-                                    { value: financialData.value.totalExpense, itemStyle: { color: '#F56C6C' } },
-                                    { value: financialData.value.balance, itemStyle: { color: financialData.value.balance >= 0 ? '#67C23A' : '#F56C6C' } }
-                                ],
-                                label: {
-                                    show: true,
-                                    formatter: '¥{c}'
-                                }
-                            }]
-                        });
-                    }
-
-                    // 监听窗口大小变化
-                    window.addEventListener('resize', () => {
-                        if (expenseChart.value) {
-                            echarts.getInstanceByDom(expenseChart.value)?.resize();
-                        }
-                        if (overviewChart.value) {
-                            echarts.getInstanceByDom(overviewChart.value)?.resize();
-                        }
-                    });
-                });
-
-                return {
-                    financialData,
-                    expenseChart,
-                    overviewChart,
-                    formatNumber
-                };
-            }
-        });
-
-        app.use(ElementPlus);
-        app.mount('#app');
-    </script>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- AdminLTE -->
+    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css" rel="stylesheet">
     <style>
-        .layout-container {
-            min-height: 100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .el-header {
-            background-color: #fff;
-            color: #333;
-            line-height: 60px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .el-main {
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
             background-color: #f0f2f5;
-            padding: 20px;
         }
 
-        .box-card {
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #606266;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            color: #303133;
+        }
+
+        .stat-value.negative {
+            color: #F56C6C;
+        }
+
+        .stat-value .prefix {
+            font-size: 16px;
+            color: #909399;
+        }
+
+        .stat-value .suffix {
+            font-size: 16px;
+            color: #909399;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .chart-card h3 {
+            color: #606266;
             margin-bottom: 20px;
         }
 
@@ -221,116 +98,351 @@
             height: 400px;
         }
 
-        .chart-row {
-            margin: 20px 0;
+        .details-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .statistic {
-            font-size: 24px;
-            text-align: center;
+        .details-card h3 {
+            color: #606266;
+            margin-bottom: 20px;
         }
 
-        .statistic .prefix,
-        .statistic .suffix {
-            font-size: 16px;
-            color: #909399;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .statistic .value {
-            margin: 0 4px;
-            color: #303133;
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #EBEEF5;
         }
 
-        .statistic.negative .value,
-        .statistic.negative .prefix {
+        th {
+            font-weight: 500;
+            color: #606266;
+            background-color: #FAFAFA;
+        }
+
+        td {
+            color: #606266;
+        }
+
+        .amount {
+            font-family: monospace;
+        }
+
+        .amount.negative {
             color: #F56C6C;
         }
 
-        .el-table {
-            margin-top: 20px;
+        .info-box {
+            min-height: 100px;
+            background: #fff;
+            width: 100%;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+        }
+
+        .info-box-number {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .info-box-text {
+            display: block;
+            font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chart-container {
+            background: #fff;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+            border-radius: 0.25rem;
+        }
+
+        .negative {
+            color: #dc3545;
+        }
+
+        .table-container {
+            background: #fff;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+            border-radius: 0.25rem;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
         }
     </style>
 </head>
-<body>
-    <div id="app">
-        <el-container class="layout-container">
-            <el-header>
-                <h2>25年1月卡卡财务报表</h2>
-            </el-header>
-            
-            <el-main>
-                <el-row :gutter="20">
-                    <el-col :span="6">
-                        <el-card class="box-card">
-                            <template #header>车辆收入</template>
-                            <div class="statistic">
-                                <span class="prefix">¥</span>
-                                <span class="value">{{ formatNumber(financialData.vehicleIncome) }}</span>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    
-                    <el-col :span="6">
-                        <el-card class="box-card">
-                            <template #header>总支出</template>
-                            <div class="statistic">
-                                <span class="prefix">¥</span>
-                                <span class="value">{{ formatNumber(financialData.totalExpense) }}</span>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    
-                    <el-col :span="6">
-                        <el-card class="box-card">
-                            <template #header>收支差额</template>
-                            <div class="statistic" :class="{ 'negative': financialData.balance < 0 }">
-                                <span class="prefix">¥</span>
-                                <span class="value">{{ formatNumber(financialData.balance) }}</span>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    
-                    <el-col :span="6">
-                        <el-card class="box-card">
-                            <template #header>车辆利润率</template>
-                            <div class="statistic">
-                                <span class="value">{{ financialData.profitMargin }}</span>
-                                <span class="suffix">%</span>
-                            </div>
-                        </el-card>
-                    </el-col>
-                </el-row>
+<body class="bg-light">
+    <div class="container-fluid py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="mb-4">25年1月卡卡财务报表</h1>
+            </div>
+        </div>
 
-                <el-row :gutter="20" class="chart-row">
-                    <el-col :span="12">
-                        <el-card class="box-card">
-                            <template #header>主要支出项目分布</template>
-                            <div ref="expenseChart" class="chart"></div>
-                        </el-card>
-                    </el-col>
-                    
-                    <el-col :span="12">
-                        <el-card class="box-card">
-                            <template #header>收支概览</template>
-                            <div ref="overviewChart" class="chart"></div>
-                        </el-card>
-                    </el-col>
-                </el-row>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-text">车辆收入</span>
+                    <span class="info-box-number">
+                        ¥<span id="income">208,039.43</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-text">总支出</span>
+                    <span class="info-box-number">
+                        ¥<span id="expense">227,434.72</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-text">收支差额</span>
+                    <span class="info-box-number negative">
+                        ¥<span id="balance">-19,395.29</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-text">车辆利润率</span>
+                    <span class="info-box-number">
+                        <span id="profit">1.74</span>%
+                    </span>
+                </div>
+            </div>
+        </div>
 
-                <el-card class="box-card">
-                    <template #header>支出明细</template>
-                    <el-table :data="financialData.expenseDetails" style="width: 100%">
-                        <el-table-column prop="category" label="类别" />
-                        <el-table-column prop="amount" label="金额">
-                            <template #default="scope">
-                                ¥{{ formatNumber(scope.row.amount) }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="description" label="说明" />
-                    </el-table>
-                </el-card>
-            </el-main>
-        </el-container>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="chart-container">
+                    <h4>主要支出项目分布</h4>
+                    <div id="expenseChart" class="chart"></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="chart-container">
+                    <h4>收支概览</h4>
+                    <div id="overviewChart" class="chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-container">
+                    <h4>支出明细</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>类别</th>
+                                    <th>金额</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseDetails"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        const financialData = {
+            vehicleIncome: 208039.43,
+            totalExpense: 227434.72,
+            balance: -19395.29,
+            profitMargin: 1.74,
+            expenseDetails: [
+                { 
+                    category: '实付工资', 
+                    amount: 113844.22, 
+                    description: '郁总 22,721.63元，郑 27,914.93元，徐 10,899.87元，陈 3,649.74元，飞 6,000元，史 4,800元，阮 -1,311.26元，王益波提成 39,092.54元（未付）【邮政扣1月公积金2,250元，扣社保10,307.28元（单位4,812×25.2%=1,212.62元，个人4,812×10.5%=505.26元）；泰隆银行扣徐思凡社保1,727.51元（单位部分25.4%）+1月公积金250元；收回郁凌社保1,717.88元和公积金250元；1月份社保单位部分增收1%=48.12元】'
+                },
+                { 
+                    category: '房租', 
+                    amount: 34959.65, 
+                    description: '25年1月房租 28,524.65元；承担装潢部1-2月房租 6,435元'
+                },
+                {
+                    category: '物业管理', 
+                    amount: 25048.4, 
+                    description: '25.1物业费 5,520.9元；25年梅山展厅物业费 19,527.5元'
+                },
+                { 
+                    category: '税金', 
+                    amount: -3900, 
+                    description: '威尔法正卜高开4,000元扣13%税点520元，余姚进项92.9万冲红2.3万补扣13%税点2,990元，埃尔法常成高开2,000元扣260元，装潢高开1,000元扣130元'
+                },
+                { 
+                    category: '水电', 
+                    amount: 700.69, 
+                    description: '1月水电费：13.46 + 624.75 + 62.48 = 700.69元'
+                },
+                { 
+                    category: '财务费用', 
+                    amount: 2278.12, 
+                    description: '邮政扣印花税 307.45元，泰隆银行扣印花税 1,810.67元，邮政扣手续费 80 + 80 = 160元'
+                },
+                { 
+                    category: '招待费', 
+                    amount: 7180, 
+                    description: '招待费：4,180元 + 3,000元 = 7,180元'
+                },
+                { 
+                    category: '宣传费', 
+                    amount: 500, 
+                    description: '马丁试驾视频：500元'
+                },
+                { 
+                    category: '管理费用', 
+                    amount: 25155.56, 
+                    description: '1月停车费：700元，裱字：2,980元，资料邮费：12 + 26 = 38元，牛奶：129.6元，样车马工合同回寄：12元，汉堡：32元，药：19.46元，牛奶：100.5元，马丁试驾广告牌：36元，中饭：390元，水果：789元，统计会议买票路费：27 × 2 × 0.5 = 27元，饭卡充值：1,000元，烟：1,520元，大米：350元，年会餐费：6,888元，衢州菜：260元，茶叶三盒：590 × 3 = 1,770元，中午买菜：314元，苹果：1,800元，年费：6,000元'
+                },
+                { 
+                    category: '融资利息', 
+                    amount: 8901.17, 
+                    description: '25年1月利息：23,978.17元，1月车辆利息：15,077元'
+                },
+                { 
+                    category: '通讯费', 
+                    amount: 200, 
+                    description: '电话费：200元'
+                }
+            ]
+        };
+
+        function formatNumber(num) {
+            return num.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // 初始化支出分布图表
+        const expenseChart = echarts.init(document.getElementById('expenseChart'));
+        const expenseData = financialData.expenseDetails
+            .filter(item => item.amount > 0)
+            .map(item => ({
+                name: item.category,
+                value: item.amount
+            }));
+
+        expenseChart.setOption({
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: ¥{c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                right: 10,
+                top: 'center',
+                type: 'scroll'
+            },
+            series: [{
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: true,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: true,
+                    formatter: '{b}: {d}%'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    }
+                },
+                data: expenseData
+            }]
+        });
+
+        // 初始化收支概览图表
+        const overviewChart = echarts.init(document.getElementById('overviewChart'));
+        overviewChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}'
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data: ['收入', '支出', '结余']
+            },
+            series: [{
+                name: '金额',
+                type: 'bar',
+                data: [
+                    { value: financialData.vehicleIncome, itemStyle: { color: '#28a745' } },
+                    { value: financialData.totalExpense, itemStyle: { color: '#dc3545' } },
+                    { value: financialData.balance, itemStyle: { color: financialData.balance >= 0 ? '#28a745' : '#dc3545' } }
+                ],
+                label: {
+                    show: true,
+                    formatter: '¥{c}'
+                }
+            }]
+        });
+
+        // 填充支出明细表格
+        const tbody = document.getElementById('expenseDetails');
+        financialData.expenseDetails.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.category}</td>
+                <td class="${item.amount < 0 ? 'negative' : ''}">${formatNumber(item.amount)}</td>
+                <td>${item.description}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // 监听窗口大小变化
+        window.addEventListener('resize', () => {
+            expenseChart.resize();
+            overviewChart.resize();
+        });
+    </script>
 </body>
 </html>
