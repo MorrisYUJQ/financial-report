@@ -6,14 +6,14 @@
     <title>财务报表</title>
     <!-- 引入 Element Plus 的样式 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css" />
-    <script type="module">
-        import { createApp } from 'https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.esm-browser.js';
-        import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.esm.min.js';
-        import { ElContainer, ElHeader, ElMain, ElRow, ElCol, ElCard, ElTable, ElTableColumn, ElMessage } from 'https://cdn.jsdelivr.net/npm/element-plus@2.3.14/dist/index.full.mjs';
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        const { createApp, ref, onMounted } = Vue;
         const app = createApp({
             setup() {
-                const financialData = Vue.ref({
+                const financialData = ref({
                     vehicleIncome: 208039.43,
                     totalExpense: 227434.72,
                     balance: -19395.29,
@@ -77,15 +77,15 @@
                     ]
                 });
 
-                const expenseChart = Vue.ref(null);
-                const overviewChart = Vue.ref(null);
+                const expenseChart = ref(null);
+                const overviewChart = ref(null);
 
                 const formatNumber = (num) => {
                     if (num === undefined || num === null) return '0';
                     return num.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 };
 
-                Vue.onMounted(() => {
+                onMounted(() => {
                     // 初始化支出分布图表
                     if (expenseChart.value) {
                         const chart = echarts.init(expenseChart.value);
@@ -193,17 +193,7 @@
             }
         });
 
-        // 注册 Element Plus 组件
-        app.use(ElContainer);
-        app.use(ElHeader);
-        app.use(ElMain);
-        app.use(ElRow);
-        app.use(ElCol);
-        app.use(ElCard);
-        app.use(ElTable);
-        app.use(ElTableColumn);
-        app.use(ElMessage);
-
+        app.use(ElementPlus);
         app.mount('#app');
     </script>
     <style>
