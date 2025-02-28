@@ -232,6 +232,96 @@
         </div>
 
         <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">关键财务指标分析</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                                <div class="info-box bg-gradient-info">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">营业利润率</span>
+                                        <span class="info-box-number" id="operatingMargin">-9.32%</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 9.32%"></div>
+                                        </div>
+                                        <span class="progress-description">
+                                            <i class="bi bi-info-circle"></i>
+                                            反映企业的盈利能力，数值越高越好
+                                        </span>
+                                        <small class="text-muted">计算方法：(收入-支出)/收入×100%</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                                <div class="info-box bg-gradient-success">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">人工成本率</span>
+                                        <span class="info-box-number" id="laborCostRatio">54.72%</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 54.72%"></div>
+                                        </div>
+                                        <span class="progress-description">
+                                            <i class="bi bi-info-circle"></i>
+                                            反映人力成本占收入的比重
+                                        </span>
+                                        <small class="text-muted">计算方法：工资总额/收入×100%</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                                <div class="info-box bg-gradient-warning">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">管理费用率</span>
+                                        <span class="info-box-number" id="managementExpenseRatio">12.09%</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 12.09%"></div>
+                                        </div>
+                                        <span class="progress-description">
+                                            <i class="bi bi-info-circle"></i>
+                                            反映管理成本的控制水平
+                                        </span>
+                                        <small class="text-muted">计算方法：管理费用/收入×100%</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">财务分析建议</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-info">
+                                            <h5><i class="bi bi-lightbulb"></i> 本月要点：</h5>
+                                            <ul>
+                                                <li>营业利润率为负值(-9.32%)，说明经营存在亏损，需要关注成本控制</li>
+                                                <li>人工成本率(54.72%)偏高，建议优化人员结构或提高人效</li>
+                                                <li>管理费用率(12.09%)处于合理范围，但仍有优化空间</li>
+                                            </ul>
+                                        </div>
+                                        <div class="alert alert-warning">
+                                            <h5><i class="bi bi-exclamation-triangle"></i> 改进建议：</h5>
+                                            <ul>
+                                                <li>考虑适当提高车辆销售价格或寻找新的收入增长点</li>
+                                                <li>优化人员结构，提高人均产值</li>
+                                                <li>加强费用管控，特别是在招待费、宣传费等方面</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-12 col-md-6">
                 <div class="chart-container">
                     <h4>主要支出项目分布</h4>
@@ -279,6 +369,9 @@
             totalExpense: 227434.72,
             balance: -19395.29,
             profitMargin: 1.74,
+            operatingMargin: -9.32,
+            laborCostRatio: 54.72,
+            managementExpenseRatio: 12.09,
             expenseDetails: [
                 { 
                     category: '实付工资', 
